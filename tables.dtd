@@ -1,73 +1,81 @@
-<!-- @file Definice struktury tabulek. -->
-
-<!-- Root element "tables"-->
-<!DOCTYPE tables[
-    <!ELEMENT tables (table*)>
-
-    <!-- Element for tables -->
-    <!ELEMENT table (fields, index*, fk*, unique*, pk?)>
-
-        <!-- Element for table -->
-        <!ELEMENT fields (field*)>
-            <!-- Element for fields -->
-            <!ELEMENT field EMPTY>
-        <!-- Element for table -->
-        <!ELEMENT index (col)>
-        <!-- Element for table -->
-        <!ELEMENT pk (key+)>
-        <!-- Element for table -->
-        <!ELEMENT unique (key+)>
-        <!-- Element for table -->
-        <!ELEMENT fk (key+, onupdate, ondelete)>
-
-            <!-- Element column for index -->
-            <!ELEMENT col (#PCDATA)>
-            <!-- Element key for foreignKey, unique, primaryKey-->
-            <!ELEMENT key (#PCDATA)>
-            <!-- Element onDelete for foreignKey -->
-            <!ELEMENT ondelete (#PCDATA)>
-            <!-- Element onUpdate for foreignKey-->
-            <!ELEMENT onupdate (#PCDATA)>
-
-    <!-- Attribute for key element -->
-    <!ATTLIST key col CDATA #IMPLIED>
-    <!-- Attributes for foreignKey -->
-    <!ATTLIST fk table CDATA #REQUIRED
-                 name CDATA #IMPLIED
-                 remove %typeBool; #IMPLIED>
-    <!-- Attribute for unique -->
-    <!ATTLIST unique name CDATA #REQUIRED
-                     remove %typeBool; #IMPLIED>
-    <!-- Attribute for index -->
-    <!ATTLIST index name CDATA #IMPLIED>
-    <!-- Attributes for field -->
-    <!ATTLIST field id NMTOKEN #REQUIRED
-                    type %fieldType; #REQUIRED
-                    name CDATA #IMPLIED
-                    size CDATA #IMPLIED
-                    check CDATA #IMPLIED
-                    default CDATA #IMPLIED
-                    gallery-column-suffix CDATA #IMPLIED
-                    filter %typeBool; #IMPLIED
-                    unique %typeBool; #IMPLIED
-                    notnull %typeBool; #IMPLIED
-                    nullable %typeBool; #IMPLIED
-                    remove %typeBool; #IMPLIED
-                    form %typeBool; #IMPLIED
-                    required %typeBool; #IMPLIED
-                    generate %typeBool; #IMPLIED
-                    js_check_length %typeBool; #IMPLIED
-                    checkbox %typeBool; #IMPLIED
-                    singleton %typeBool; #IMPLIED>
-
-    <!-- Attributes for table -->
-    <!ATTLIST table id NMTOKEN #REQUIRED
-                    default %typeBool; #IMPLIED>
-
+<!--
+    @file Definice struktury tabulek.
+    Napovídání povolených elementů, atributů a hodnot v rámci tables.xml pro admin moduly.
+-->
 
     <!-- Entity for available values of fieldType attribute -->
-    <!ENTITY fieldType "(author|biginteger|bool|boolean|bpchar|char|color|date|dateonly|decimal|double|double3|file|fk|fk+|float|float4|float8|id|int|int2|int4|int8|lang|pass|password|pfk|rank|selectstring|serial|serial4|serial8|smallinteger|state|string|time|timer|timestamp|timetz|varbit|varchar|wiki|wysiwyg|year|ltree|text|timestamp|time|xml|uuid|interval|inet|bytea|money|bit|)">
+    <!ENTITY % fieldType "author|bigint|biginteger|bool|boolean|bpchar|char|color|date|dateonly|decimal|double|double3|file|fk|float|float4|float8|id|int|int2|int4|int8|lang|pass|password|pfk|rank|real|selectstring|serial|serial4|serial8|smallinteger|state|string|time|timer|timestamp|timetz|varbit|varchar|wiki|wysiwyg|year|ltree|text|xml|uuid|interval|inet|bytea|money|bit">
 
     <!-- Entity for all boolean attributes -->
-    <!ENTITY typeBool "(0|1)">
-]>
+    <!ENTITY % typeBool "0|1|t|f">
+
+
+    <!-- Root element "tables"-->
+    <!ELEMENT tables (table*)>
+
+        <!-- Element for tables -->
+        <!ELEMENT table (fields, (index*|fk*|unique*|pk?)*)>
+            <!-- Attributes for table -->
+            <!ATTLIST table id NMTOKEN #REQUIRED
+                            default (%typeBool;) #IMPLIED>
+
+            <!-- Element for table -->
+            <!ELEMENT fields (field*)>
+                <!-- Element for fields -->
+                <!ELEMENT field EMPTY>
+                    <!-- Attributes for field -->
+                    <!ATTLIST field id NMTOKEN #REQUIRED
+                                    type (%fieldType;) #REQUIRED
+                                    name CDATA #IMPLIED
+                                    size CDATA #IMPLIED
+                                    check CDATA #IMPLIED
+                                    default CDATA #IMPLIED
+                                    gallery-column-suffix CDATA #IMPLIED
+                                    filter (%typeBool;) #IMPLIED
+                                    unique (%typeBool;) #IMPLIED
+                                    notnull (%typeBool;) #IMPLIED
+                                    nullable (%typeBool;) #IMPLIED
+                                    remove (%typeBool;) #IMPLIED
+                                    form (%typeBool;) #IMPLIED
+                                    required (%typeBool;) #IMPLIED
+                                    generate (%typeBool;) #IMPLIED
+                                    js_check_length (%typeBool;) #IMPLIED
+                                    checkbox (%typeBool;) #IMPLIED
+                                    singleton (%typeBool;) #IMPLIED>
+
+            <!-- Element for table -->
+            <!ELEMENT index (col+)>
+                <!-- Attribute for index -->
+                <!ATTLIST index name CDATA #IMPLIED>
+
+                <!-- Element column for index -->
+                <!ELEMENT col (#PCDATA)>
+
+            <!-- Element for table -->
+            <!ELEMENT pk (key+)>
+
+            <!-- Element for table -->
+            <!ELEMENT unique (key+)>
+                <!-- Attribute for unique -->
+                <!ATTLIST unique name CDATA #REQUIRED
+                                 remove (%typeBool;) #IMPLIED>
+
+            <!-- Element for table -->
+            <!ELEMENT fk (key+, (onupdate|ONUPDATE)?, (ondelete|ONDELETE)?)>
+                <!-- Attributes for foreignKey -->
+                <!ATTLIST fk table CDATA #REQUIRED
+                             name CDATA #IMPLIED
+                             remove (%typeBool;) #IMPLIED>
+
+                <!-- Element onDelete for foreignKey -->
+                <!ELEMENT ondelete (#PCDATA)>
+                <!ELEMENT ONDELETE (#PCDATA)>
+
+                <!-- Element onUpdate for foreignKey-->
+                <!ELEMENT onupdate (#PCDATA)>
+                <!ELEMENT ONUPDATE (#PCDATA)>
+
+            <!-- Element key for foreignKey, unique, primaryKey-->
+            <!ELEMENT key (#PCDATA)>
+                <!-- Attribute for key element -->
+                <!ATTLIST key col CDATA #IMPLIED>
